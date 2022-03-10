@@ -30,17 +30,16 @@ public class Model {
         BufferedImage imagen = m.readImage("star wars.jpg");
         
         
-//        color = new Color(imagen.getRGB(x, y));
-        //Color color = new Color(imagen.getRGB(1, 1));
+
         int w = imagen.getWidth();
         int h = imagen.getHeight();
         //Color 
-        //newImage.setRGB(0,0, new Color(0,0,0).getRGB());
+        
         BufferedImage newImage = new BufferedImage(imagen.getWidth(),
                 imagen.getHeight(),
                 BufferedImage.TYPE_3BYTE_BGR);
                 
-        //int rgb = imagen.getRGB(int x, int y);
+        
         //red filter
         /*for (int i =0; i < w-1; i++)
         {
