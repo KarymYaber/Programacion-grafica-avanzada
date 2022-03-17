@@ -28,12 +28,15 @@ public class Model {
         Model m = new Model();
         
         BufferedImage imagen = m.readImage("star wars.jpg");
-        
+        BufferedImage imagen2 = m.readImage("Revan.jpg");
+        BufferedImage imagen3;
         
 //        color = new Color(imagen.getRGB(x, y));
         //Color color = new Color(imagen.getRGB(1, 1));
         int w = imagen.getWidth();
         int h = imagen.getHeight();
+        int w2 = imagen2.getWidth();
+        int h2 = imagen2.getHeight();
         //Color 
         //newImage.setRGB(0,0, new Color(0,0,0).getRGB());
         BufferedImage newImage = new BufferedImage(imagen.getWidth(),
@@ -152,7 +155,7 @@ public class Model {
             }
         }*/
         //blur
-        double [][] matrix = {{0,.2,0}, {.2,.2,.2}, {0,.2,0}};
+        /*double [][] matrix = {{0,.2,0}, {.2,.2,.2}, {0,.2,0}};
        
         for (int i =0; i < w-1; i++)
         {
@@ -183,8 +186,49 @@ public class Model {
                  
             }
             
+        }*/
+       // blending
+        for (int i =0; i < w-1; i++)
+        {
+            for (int j =0; j < h-1; j++)
+            {
+                Color color = new Color(imagen.getRGB(i, j));
+                int red1 = (int) (color.getRed() + color.getGreen() + color.getBlue());
+                int green1 = (int)(color.getRed() + color.getGreen() + color.getBlue());
+                int blue1 = (int)(color.getRed() + color.getGreen() + color.getBlue());
+                //Color color = new Color(imagen.getRGB(i, j));
+                imagen.setRGB(i,j, new Color(0,0,0).getRGB()); 
+                for (int a =0; a < w2-1; a++)
+                {
+                    for (int b =0; b < h2-1; b++)
+                    {
+                        Color color2 = new Color(imagen2.getRGB(a, b));
+                        int red2 = (int) (color2.getRed() + color2.getGreen() + color2.getBlue());
+                        int green2 = (int)(color2.getRed() + color2.getGreen() + color2.getBlue());
+                        int blue2 = (int)(color2.getRed() + color2.getGreen() + color2.getBlue());
+                //Color color = new Color(imagen.getRGB(i, j));
+                        imagen2.setRGB(a,b, new Color(0,0,0).getRGB());
+                        int redf = red1 + red2;
+                        int greenf = green1 + green2;
+                        int bluef = blue1 + blue2;
+                        //imagen3 = imagen + imagen2;
+
+                    }
+                //imagen.setRGB(i,j, new Color(color.getRed(),0,0).getRGB());
+                //System.out.println("Hola Mundo2"); 
+                }
+                
+            }
         }
-        m.writeImage(newImage,"starwars_blur", "jpg");
+        
+            
+        //imagen3 = (imagen) + (imagen2);
+        
+
+
+
+        
+        m.writeImage(newImage,"try", "jpg");
         
         
         
