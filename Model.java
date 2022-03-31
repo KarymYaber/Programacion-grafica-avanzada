@@ -151,40 +151,138 @@ public class Model {
                 //System.out.println(bandw); 
             }
         }*/
-        //blur
-        double [][] matrix = {{0,.2,0}, {.2,.2,.2}, {0,.2,0}};
-       
-        for (int i =0; i < w-1; i++)
-        {
-            for (int j =0; j < h-1; j++)
-            {
-                for (int x =0; x < matrix.length; x++)
-                {
-                    for (int y =0; y < matrix.length; y++)
-                    {
-                        if (i+1 > w || j+1>h)
+        
+        
+         //blur
+         /*double [][] matrix = {{0,.2,0}, {.2,.2,.2}, {0,.2,0}};
+            System.out.println("W " + w + " h " + h);      
+         for (int i =0; i < w-1; i++)
+         {
+ 
+             for (int j =0; j < h-1; j++)
+             {
+                 double redacum = 0;
+                 double greenacum = 0;
+                 double blueacum = 0;
+                 for (int x =0; x < matrix.length; x++)
+                 {
+                     for (int y =0; y < matrix.length; y++)
+                     {
+                        if ((i+(x-1) < w && j+(y-1) < h )&& (i+(x-1) > 0 && j+(y-1) > 0 ))
+                        {
+
+                           //System.out.println("wp " + (i+(x-1)) + " hp " + (j+(y-1)));
+                            Color color = new Color(imagen.getRGB(i+(x-1), j+(y-1)));
+                           
+                            double red = (double)(color.getRed());
+                            redacum = redacum + matrix[x][y] * red;
+                            double green = (double)(color.getGreen());
+                            greenacum = greenacum + matrix[x][y] * green;
+                            double blue = (double)(color.getBlue());
+                            blueacum = blueacum + matrix[x][y] * blue;
+   
+                            if (redacum > 255)
+                            {
+                                redacum = 255;
+                            }
+                           if (greenacum > 255)
+                            {
+                                greenacum = 255;
+                            }
+                           if (blueacum > 255)
+                            {
+                                blueacum = 255;
+                            }
+    
+                            
+                        }
+                        else 
                         {
                             
-                            break;
                         }
-                        if (i-1 < 0 || j-1<0)
-                        {
-                            
-                            
-                            break;
-                        }
+                         
                         //System.out.println(matrix[x][y]);
                         
-                        Color color = new Color(imagen.getRGB((i+(x-1)), (j+(y-1))));
+                          
+                     }
+                     
+                  }
+                  newImage.setRGB(i,j, new Color((int)redacum,(int)greenacum,(int)blueacum).getRGB());  
+             }
+             
+         }*/
 
-                    }
-                    
-                 }
-                 
-            }
-            
-        }
-        m.writeImage(newImage,"starwars_blur", "jpg");
+         //bordes
+         /*double [][] matrix = {{0,1,0}, {1,-4,1}, {0,1,0}};
+            System.out.println("W " + w + " h " + h);      
+         for (int i =0; i < w-1; i++)
+         {
+ 
+             for (int j =0; j < h-1; j++)
+             {
+                 double redacum = 0;
+                 double greenacum = 0;
+                 double blueacum = 0;
+                 for (int x =0; x < matrix.length; x++)
+                 {
+                     for (int y =0; y < matrix.length; y++)
+                     {
+                        if ((i+(x-1) < w && j+(y-1) < h )&& (i+(x-1) > 0 && j+(y-1) > 0 ))
+                        {
+
+                           //System.out.println("wp " + (i+(x-1)) + " hp " + (j+(y-1)));
+                            Color color = new Color(imagen.getRGB(i+(x-1), j+(y-1)));
+                            double red = (double)(color.getRed());
+                            redacum = redacum + matrix[x][y] * red;
+                            double green = (double)(color.getGreen());
+                            greenacum = greenacum + matrix[x][y] * green;
+                            double blue = (double)(color.getBlue());
+                            blueacum = blueacum + matrix[x][y] * blue;
+                            
+                            
+    
+                            
+                        }
+                        
+                         
+                        //System.out.println(matrix[x][y]);
+                        
+                          
+                     }
+                     
+                  }
+                            if (redacum > 255)
+                            {
+                                redacum = 255; 
+                            }
+                            if (redacum < 0)
+                            {
+                                redacum = 0;
+                            }
+                
+                           if (greenacum > 255)
+                            {
+                                greenacum = 255;
+                            }
+                            if (greenacum < 0)
+                            {
+                                greenacum = 0;
+                            }
+                           if (blueacum > 255)
+                            {
+                                blueacum = 255;
+                            }
+                            if (blueacum < 0)
+                            {
+                                blueacum = 0;
+                            }
+                  newImage.setRGB(i,j, new Color((int)redacum,(int)greenacum,(int)blueacum).getRGB());  
+             }
+             
+         }*/
+
+         
+        m.writeImage(newImage,"starwars_bordes", "jpg");
         
         
         
