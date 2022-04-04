@@ -28,18 +28,41 @@ public class Model {
         Model m = new Model();
         
         BufferedImage imagen = m.readImage("star wars.jpg");
-        
-        
-//        color = new Color(imagen.getRGB(x, y));
-        //Color color = new Color(imagen.getRGB(1, 1));
-        int w = imagen.getWidth();
-        int h = imagen.getHeight();
-        //Color 
-        //newImage.setRGB(0,0, new Color(0,0,0).getRGB());
-        BufferedImage newImage = new BufferedImage(imagen.getWidth(),
-                imagen.getHeight(),
-                BufferedImage.TYPE_3BYTE_BGR);
-                
+        BufferedImage imagen2 = m.readImage("Revan.jpg");
+        BufferedImage newImage = new BufferedImage(imagen.getWidth(),imagen.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bigImage = new BufferedImage(imagen.getWidth()*2, imagen.getHeight()*2, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage smallImage = new BufferedImage(imagen.getWidth()/2, imagen.getHeight()/2, BufferedImage.TYPE_3BYTE_BGR);
+
+            int w = imagen.getWidth();
+            int h = imagen.getHeight();
+            int w2 = imagen2.getWidth();
+            int h2 = imagen2.getHeight();
+            
+            //blending
+            /*int percentage = 50;                        
+            float imag1 = percentage / 100f;
+            float imag2 = 1f - imag1;
+            
+            for (int i =0; i < w2-1 && i < w-1; i++)
+            {
+    
+                for (int j =0; j < h2-1 && j < h-1; j++)
+                { 
+                    Color color = new Color(imagen.getRGB(i, j));
+                    Color color2 = new Color(imagen2.getRGB(i, j));
+                    int redacum = Math.round((color.getRed()   * imag1) + (color2.getRed()   * imag2));
+                    int greenacum = Math.round((color.getGreen() * imag1) + (color2.getGreen() * imag2));
+                    int blueacum = Math.round((color.getBlue()  * imag1) + (color2.getBlue()  * imag2));
+
+                    newImage.setRGB(i,j,new Color(redacum, greenacum, blueacum).getRGB()); 
+                    
+                    
+                }
+            }*/
+         
+            m.writeImage(newImage,"starwars_Blend", "jpg");
+    
+
         //int rgb = imagen.getRGB(int x, int y);
         //red filter
         /*for (int i =0; i < w-1; i++)
@@ -281,8 +304,104 @@ public class Model {
              
          }*/
 
+         //Sharpen Filter
+         /*double [][] matrix = {{0,-1,0}, {-1,5,-1}, {0,-1,0}};
+            //System.out.println("W " + w + " h " + h);      
+         for (int i =0; i < w-1; i++)
+         {
+ 
+             for (int j =0; j < h-1; j++)
+             {
+                 double redacum = 0;
+                 double greenacum = 0;
+                 double blueacum = 0;
+                 for (int x =0; x < matrix.length; x++)
+                 {
+                     for (int y =0; y < matrix.length; y++)
+                     {
+                        if ((i+(x-1) < w && j+(y-1) < h )&& (i+(x-1) > 0 && j+(y-1) > 0 ))
+                        {
+
+                           //System.out.println("wp " + (i+(x-1)) + " hp " + (j+(y-1)));
+                            Color color = new Color(imagen.getRGB(i+(x-1), j+(y-1)));
+                            double red = (double)(color.getRed());
+                            redacum = redacum + matrix[x][y] * red;
+                            double green = (double)(color.getGreen());
+                            greenacum = greenacum + matrix[x][y] * green;
+                            double blue = (double)(color.getBlue());
+                            blueacum = blueacum + matrix[x][y] * blue;
+                            
+                            
+    
+                            
+                        }
+ 
+                     }
+                     
+                  }
+                            if (redacum > 255)
+                            {
+                                redacum = 255; 
+                            }
+                            if (redacum < 0)
+                            {
+                                redacum = 0;
+                            }
+                
+                           if (greenacum > 255)
+                            {
+                                greenacum = 255;
+                            }
+                            if (greenacum < 0)
+                            {
+                                greenacum = 0;
+                            }
+                           if (blueacum > 255)
+                            {
+                                blueacum = 255;
+                            }
+                            if (blueacum < 0)
+                            {
+                                blueacum = 0;
+                            }
+                  newImage.setRGB(i,j, new Color((int)redacum,(int)greenacum,(int)blueacum).getRGB());  
+             }
+             
+         }*/
+         //Blend Filter
+         /*public static void blendfilter (BufferedImage imagen, BufferedImage imagen2, BufferedImage newImage, String typeImage, Model m, String name)
+         {
+            int w2 = imagen.getWidth();
+            int h2 = imagen.getHeight();  
+            int w = imagen2.getWidth();
+            int h = imagen2.getHeight();  
+            int percentage = 50;                        
+            float imag1 = percentage / 100f;
+            float imag2 = 1f - imag1;
+            
+            for (int i =0; i < w2-1 && i < w-1; i++)
+            {
+    
+                for (int j =0; j < h2-1 && j < h-1; j++)
+                { 
+                    Color color = new Color(imagen.getRGB(i, j));
+                    Color color2 = new Color(imagen2.getRGB(i, j));
+                    int redacum = Math.round((color.getRed()   * imag1) + (color2.getRed()   * imag2));
+                    int greenacum = Math.round((color.getGreen() * imag1) + (color2.getGreen() * imag2));
+                    int blueacum = Math.round((color.getBlue()  * imag1) + (color2.getBlue()  * imag2));
+                    //Color blendColor = new Color(redacum,greenacum,blueacum);
+                    
+                    
+                    
+                    newImage.setRGB(i,j,new Color(redacum, greenacum, blueacum).getRGB()); 
+                    
+                    
+                }
+            }
          
-        m.writeImage(newImage,"starwars_bordes", "jpg");
+            m.writeImage(newImage,"starwars_Blend", "jpg");
+         }*/
+    }
         
         
         
@@ -292,9 +411,7 @@ public class Model {
        
         //m.writeImage(imagen, "starwars_blur", "jpg");
        
-        //System.out.println("mult"+ red);
-        
-    }
+        //System.out.println("mult"+ red);  
 
     
     public BufferedImage readImage(String pathname) {
