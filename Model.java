@@ -38,6 +38,8 @@ public class Model {
             int w2 = imagen2.getWidth();
             int h2 = imagen2.getHeight();
             
+            /*
+            
             //hybrid filter
             int percentage = 50;                        
             float imag1 = percentage / 100f;
