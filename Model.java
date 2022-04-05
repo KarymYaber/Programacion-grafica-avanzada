@@ -38,7 +38,96 @@ public class Model {
             int w2 = imagen2.getWidth();
             int h2 = imagen2.getHeight();
             
-            //blending
+            //hybrid filter
+            int percentage = 50;                        
+            float imag1 = percentage / 100f;
+            float imag2 = 1f - imag1;
+            double [][] matrixblur = {{0,.2,0}, {.2,.2,.2}, {0,.2,0}};
+            double [][] matrixbordes = {{0,1,0}, {1,-4,1}, {0,1,0}};
+            for (int i =0; i < w2-1 && i < w-1; i++)
+            {
+    
+                for (int j =0; j < h2-1 && j < h-1; j++)
+                { 
+                    
+                    double redb = 0;
+                    double greenb = 0;
+                    double blueb = 0;
+                    double redbor = 0;
+                    double greenbor = 0;
+                    double bluebor = 0;
+                    int redacum = 0;
+                    int greenacum = 0;
+                    int blueacum = 0;
+                 for (int x =0; x < matrixblur.length && x < matrixbordes.length; x++)
+                 {
+                     for (int y =0; y < matrixblur.length && y < matrixbordes.length; y++)
+                     {
+                        if ((i+(x-1) < w && j+(y-1) < h ) && (i+(x-1) > 0 && j+(y-1) > 0 ))
+                        {
+                            //blur
+                            
+                            Color color = new Color(imagen.getRGB(i+(x-1), j+(y-1)));
+                           
+                            double red = (double)(color.getRed());
+                            redb = redb + matrixblur[x][y] * red;
+                            double green = (double)(color.getGreen());
+                            greenb = greenb + matrixblur[x][y] * green;
+                            double blue = (double)(color.getBlue());
+                            blueb = blueb + matrixblur[x][y] * blue;
+                            //bordes
+                            Color color2 = new Color(imagen2.getRGB(i+(x-1), j+(y-1)));
+                            double redbordes = (double)(color2.getRed());
+                            redbor = redbor + matrixbordes[x][y] * redbordes;
+                            double greenbordes = (double)(color2.getGreen());
+                            greenbor = greenbor + matrixbordes[x][y] * greenbordes;
+                            double bluebordes = (double)(color2.getBlue());
+                            bluebor = bluebor + matrixbordes[x][y] * bluebordes;
+                            
+                            
+                            
+                            redacum = Math.round(((int)redb * imag1) + ((int)redbor   * imag2));
+                            greenacum = Math.round(((int)greenb * imag1) + ((int)greenbor * imag2));
+                            blueacum = Math.round(((int)blueb  * imag1) + ((int)redbor  * imag2));
+
+                        }
+                            if (redacum > 255)
+                                {
+                                    redacum = 255;
+                                }
+                            if (greenacum > 255)
+                                {
+                                    greenacum = 255;
+                                }
+                            if (blueacum > 255)
+                                {
+                                    blueacum = 255;
+                                }
+                            if (redacum < 0)
+                                {
+                                    redacum = 255;
+                                }
+                            if (greenacum < 0)
+                                {
+                                    greenacum = 255;
+                                }
+                            if (blueacum < 0)
+                                {
+                                    blueacum = 255;
+                                }
+                                
+                            
+                        }
+
+                     }
+                     newImage.setRGB(i,j,new Color(redacum, greenacum, blueacum).getRGB());  
+                  }
+                }
+                
+            
+                    
+
+            //blending filter
             /*int percentage = 50;                        
             float imag1 = percentage / 100f;
             float imag2 = 1f - imag1;
@@ -60,7 +149,7 @@ public class Model {
                 }
             }*/
          
-            m.writeImage(newImage,"starwars_Blend", "jpg");
+            
     
 
         //int rgb = imagen.getRGB(int x, int y);
@@ -368,39 +457,7 @@ public class Model {
              }
              
          }*/
-         //Blend Filter
-         /*public static void blendfilter (BufferedImage imagen, BufferedImage imagen2, BufferedImage newImage, String typeImage, Model m, String name)
-         {
-            int w2 = imagen.getWidth();
-            int h2 = imagen.getHeight();  
-            int w = imagen2.getWidth();
-            int h = imagen2.getHeight();  
-            int percentage = 50;                        
-            float imag1 = percentage / 100f;
-            float imag2 = 1f - imag1;
-            
-            for (int i =0; i < w2-1 && i < w-1; i++)
-            {
-    
-                for (int j =0; j < h2-1 && j < h-1; j++)
-                { 
-                    Color color = new Color(imagen.getRGB(i, j));
-                    Color color2 = new Color(imagen2.getRGB(i, j));
-                    int redacum = Math.round((color.getRed()   * imag1) + (color2.getRed()   * imag2));
-                    int greenacum = Math.round((color.getGreen() * imag1) + (color2.getGreen() * imag2));
-                    int blueacum = Math.round((color.getBlue()  * imag1) + (color2.getBlue()  * imag2));
-                    //Color blendColor = new Color(redacum,greenacum,blueacum);
-                    
-                    
-                    
-                    newImage.setRGB(i,j,new Color(redacum, greenacum, blueacum).getRGB()); 
-                    
-                    
-                }
-            }
-         
-            m.writeImage(newImage,"starwars_Blend", "jpg");
-         }*/
+         m.writeImage(newImage,"starwars_Hybrid", "jpg");
     }
         
         
