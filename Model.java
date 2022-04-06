@@ -31,14 +31,126 @@ public class Model {
         BufferedImage imagen2 = m.readImage("Revan.jpg");
         BufferedImage newImage = new BufferedImage(imagen.getWidth(),imagen.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
         BufferedImage bigImage = new BufferedImage(imagen.getWidth()*2, imagen.getHeight()*2, BufferedImage.TYPE_3BYTE_BGR);
-        BufferedImage smallImage = new BufferedImage(imagen.getWidth()/2, imagen.getHeight()/2, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage smallImage = new BufferedImage(imagen2.getWidth(), imagen2.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 
             int w = imagen.getWidth();
             int h = imagen.getHeight();
             int w2 = imagen2.getWidth();
             int h2 = imagen2.getHeight();
+            int widthS = bigImage.getWidth();  
+            int heightS = bigImage.getHeight();  
             
+        //scale filter big
+        /*float redscale=0f; 
+        float greenscale=0f; 
+        float bluescale=0f;
+        for (int i =0; i < w-1; i++)
+        {
+            
+
+            for (int j =0; j < h-1; j++)
+            {
+                        
+                        
+                
+                Color color = new Color(imagen2.getRGB(i, j));
+                    
+                        //smallImage.setRGB((i*2),  (j*2),   color.getRGB());
+                        //smallImage.setRGB((i*2),  (j*2)+1, color.getRGB());
+                        //smallImage.setRGB((i*2)+1,(j*2),   color.getRGB());
+                        //smallImage.setRGB((i*2)+1,(j*2)+1, color.getRGB()); 
+                        redscale = (color.getRed());
+                        greenscale = (color.getGreen());
+                        bluescale = (color.getBlue());
+
+                        if (redscale > 255)
+                        {
+                            redscale = 255;
+                        }
+                    if (greenscale > 255)
+                        {
+                            greenscale = 255;
+                        }
+                    if (bluescale > 255)
+                        {
+                            bluescale = 255;
+                        }
+                    if (redscale < 0)
+                        {
+                            redscale = 255;
+                        }
+                    if (greenscale < 0)
+                        {
+                            greenscale = 255;
+                        }
+                    if (bluescale < 0)
+                        {
+                            bluescale = 255;
+                        }
+                        
+                        
+                        smallImage.setRGB(i*2,j*2, new Color((int)redscale, (int)greenscale, (int)bluescale ).getRGB());
+
+                        
+                        
+            }
+                           
+        }*/
+        
+        //small filter
+        float redscale=0f; 
+        float greenscale=0f; 
+        float bluescale=0f;
+        for (int i =0; i < w-1; i++)
+        {
+            
+
+            for (int j =0; j < h-1; j++)
+            {
+                        
+                        
+                
+                Color color = new Color(imagen.getRGB(i, j));
+                        
+                        
+                        redscale = (color.getRed());
+                        greenscale = (color.getGreen());
+                        bluescale = (color.getBlue());
+
+                        
+                        if (redscale > 255)
+                        {
+                            redscale = 255;
+                        }
+                    if (greenscale > 255)
+                        {
+                            greenscale = 255;
+                        }
+                    if (bluescale > 255)
+                        {
+                            bluescale = 255;
+                        }
+                    if (redscale < 0)
+                        {
+                            redscale = 255;
+                        }
+                    if (greenscale < 0)
+                        {
+                            greenscale = 255;
+                        }
+                    if (bluescale < 0)
+                        {
+                            bluescale = 255;
+                        }
+                bigImage.setRGB(i,j, new Color((int)redscale, (int)greenscale, (int)bluescale ).getRGB());
+                        
+                        
+            }
+                           
+        }
+        
             /*
+        
             
             //hybrid filter
             int percentage = 50;                        
@@ -459,7 +571,8 @@ public class Model {
              }
              
          }*/
-         m.writeImage(newImage,"starwars_Hybrid", "jpg");
+         //m.writeImage(smallImage,"starwars_big", "jpg");
+         m.writeImage(bigImage,"starwars_small", "jpg");
     }
         
         
