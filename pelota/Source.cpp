@@ -4,14 +4,14 @@
 #include <gl\glut.h> //the glut file for windows operations
 					 // it also includes gl.h and glu.h for the openGL library calls
 #include <math.h>
-#inculde <conio.h>
+#include <conio.h>
 
 #define PI 3.1415926535898 
 
 double xpos, ypos, ydir, xdir;         // x and y position for house to be drawn
 double sx, sy, squash;          // xy scale factors
 double rot, rdir;             // rotation 
-int SPEED = 50;        // speed of timer call back in msecs
+float SPEED = .005f;        // speed of timer call back in msecs
 GLfloat T1[16] = { 1.,0.,0.,0.,\
 				  0.,1.,0.,0.,\
 				  0.,0.,1.,0.,\
@@ -94,8 +94,8 @@ void Display(void)
 	// 120 is max Y value in our world
 	// set Y position to increment 1.5 times the direction of the bounce
 	//else {
-		ypos = ypos + ydir * 1.5 - (1. - sy) * RadiusOfBall;
-		xpos = xpos + xdir * 1.5 - (1. - sx) * RadiusOfBall;
+		ypos = ypos + ydir * SPEED;
+		xpos = xpos + xdir * SPEED;
 		// If ball touches the top, change direction of ball downwards
 		/*if (ypos == 120 - RadiusOfBall || xpos == 160 - RadiusOfBall) {
 			ydir = -1;
