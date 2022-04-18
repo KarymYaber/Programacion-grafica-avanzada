@@ -4,6 +4,7 @@
 #include <gl\glut.h> //the glut file for windows operations
 					 // it also includes gl.h and glu.h for the openGL library calls
 #include <math.h>
+#inculde <conio.h>
 
 #define PI 3.1415926535898 
 
