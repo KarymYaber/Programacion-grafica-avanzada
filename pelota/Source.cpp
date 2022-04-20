@@ -11,7 +11,7 @@
 double xpos, ypos, ydir, xdir;         // x and y position for house to be drawn
 double sx, sy, squash;          // xy scale factors
 double rot, rdir;             // rotation 
-float SPEED = .005f;        // speed of timer call back in msecs
+float SPEED = .05f;        // speed of timer call back in msecs
 GLfloat T1[16] = { 1.,0.,0.,0.,\
 				  0.,1.,0.,0.,\
 				  0.,0.,1.,0.,\
@@ -29,7 +29,7 @@ GLfloat T[16] = { 1.,0.,0.,0.,\
 
 #define PI 3.1415926535898 
 GLint circle_points = 100;
-//GLint circle2_points = 50;
+GLint square_points = 4;
 void MyCircle2f(GLfloat centerx, GLfloat centery, GLfloat radius) {
 	GLint i;
 	GLdouble angle;
@@ -40,30 +40,54 @@ void MyCircle2f(GLfloat centerx, GLfloat centery, GLfloat radius) {
 	}
 	glEnd();
 }
+
+void MySquare1f(GLfloat x1, GLfloat y1, GLfloat sidelength) {
+	GLint a;
+	sidelength = 20;
+	
+	glBegin(GL_POLYGON);
+	for (a = 0; a < square_points; a++) {
+		
+		glVertex2f(x1 + sidelength/2, y1 + sidelength);
+		glVertex2f(x1 + sidelength/2, y1 - sidelength);
+		glVertex2f(x1 - sidelength/2, y1 - sidelength);
+		glVertex2f(x1 - sidelength/2, y1 + sidelength);
+	}
+	glEnd();
+}
+
 void MyCircle1f(GLfloat centerx, GLfloat centery, GLfloat radius) {
 	GLint a;
 	GLdouble angle;
 	glBegin(GL_POLYGON);
 	for (a = 0; a < circle_points; a++) {
-		angle = 4 * PI * a / circle_points/2;
+		angle = 4 * PI * a / circle_points / 2;
 		glVertex2f(centerx + radius * cos(angle), centery + radius * sin(angle));
 	}
 	glEnd();
 }
 
 GLfloat RadiusOfBall = 15.;
-GLfloat RadiusOfBall2 = 8.;
+GLfloat RadiusOfBall2 = 20.;
+
 // Draw the ball, centered at the origin
 void draw_ball() {
 	glColor3f(0.6, 0.3, 0.);
 	MyCircle2f(0., 0., RadiusOfBall);
 
 }
-void draw_ball2() {
+
+void draw_square1() {
+	glColor3f(0., 0., 0.);
+	MySquare1f(0., 0., RadiusOfBall2);
+
+}
+
+/*void draw_ball2() {
 	glColor3f(0.4, 0.6, 0.);
 	MyCircle1f(50, 50, RadiusOfBall2);
 
-}
+}*/
 
 void Display(void)
 {
@@ -79,9 +103,8 @@ void Display(void)
 	// Shape has hit the ground! Stop moving and start squashing down and then back up 
 		/*if (ypos == RadiusOfBall && ydir == -1) {
 		sy = sy * squash;
-
 		if (sy < 0.8)
-			// reached maximum suqash, now unsquash back up 
+			// reached maximum suqash, now unsquash back up
 			squash = 1.1;
 		else if (sy > 1.) {
 			// reset squash parameters and bounce ball back upwards
@@ -94,66 +117,63 @@ void Display(void)
 	// 120 is max Y value in our world
 	// set Y position to increment 1.5 times the direction of the bounce
 	//else {
-		ypos = ypos + ydir * SPEED;
-		xpos = xpos + xdir * SPEED;
-		// If ball touches the top, change direction of ball downwards
-		/*if (ypos == 120 - RadiusOfBall || xpos == 160 - RadiusOfBall) {
-			ydir = -1;
-			xdir = -xdir;
-		}
-		// If ball touches the bottom, change direction of ball upwards
-		else if (ypos < RadiusOfBall || xpos < RadiusOfBall) {
-			ydir = 1;
-			xdir = xdir;
-		}*/
-		if (ypos == 120. - RadiusOfBall) {
-			ydir = -1;
-			
-		}
-		// If ball touches the bottom, change direction of ball upwards
-		else if (ypos < RadiusOfBall) {
-			ydir = 1;
-			
-		}
+	ypos = ypos + ydir * SPEED;
+	xpos = xpos + xdir * SPEED;
+	// If ball touches the top, change direction of ball downwards
+	/*if (ypos == 120 - RadiusOfBall || xpos == 160 - RadiusOfBall) {
+		ydir = -1;
+		xdir = -xdir;
+	}
+	// If ball touches the bottom, change direction of ball upwards
+	else if (ypos < RadiusOfBall || xpos < RadiusOfBall) {
+		ydir = 1;
+		xdir = xdir;
+	}*/
+	if (ypos >= 120. - RadiusOfBall) {
+		ydir = -1;
 
-		//x horizontal
-		if (xpos >= 160. - RadiusOfBall) {
-			xdir = -1;
-		}
+	}
+	// If ball touches the bottom, change direction of ball upwards
+	else if (ypos < RadiusOfBall) {
+		ydir = 1;
 
-		// If ball touches the bottom, change direction of ball upwards
-		else if (xpos < RadiusOfBall) {
-			xdir = 1;
-		}
+	}
 
-		//bola2
-		/*ypos = ypos + ydir * 1.5 - (1. - sy) * RadiusOfBall2;
-		// If ball touches the top, change direction of ball downwards
-		if (ypos == 120 - RadiusOfBall2)
-			ydir = -1, -1;
-		// If ball touches the bottom, change direction of ball upwards
-		else if (ypos < RadiusOfBall2)
-			ydir = 1, 1;*/
-	
+	//x horizontal
+	if (xpos >= 160. - RadiusOfBall) {
+		xdir = -1;
+	}
 
-	/*  //reset transformation state
-	  glLoadIdentity();
+	// If ball touches the bottom, change direction of ball upwards
+	else if (xpos < RadiusOfBall) {
+		xdir = 1;
+	}
 
-	  // apply translation
-	  glTranslatef(xpos,ypos, 0.);
+	//bola2
+	/*ypos = ypos + ydir * 1.5 - (1. - sy) * RadiusOfBall2;
+	// If ball touches the top, change direction of ball downwards
+	if (ypos == 120 - RadiusOfBall2)
+		ydir = -1, -1;
+	// If ball touches the bottom, change direction of ball upwards
+	else if (ypos < RadiusOfBall2)
+		ydir = 1, 1;*/
 
-	  // Translate ball back to center
-	  glTranslatef(0.,-RadiusOfBall, 0.);
-	  // Scale the ball about its bottom
-	  glScalef(sx,sy, 1.);
-	  // Translate ball up so bottom is at the origin
-	  glTranslatef(0.,RadiusOfBall, 0.);
-	  // draw the ball
-	  draw_ball();
-	*/
 
-	//Translate the bouncing ball to its new position
-	T[12] = xpos;
+		  //reset transformation state
+		  glLoadIdentity();
+		  // apply translation
+		  glTranslatef(xpos,ypos, 0.);
+		  // Translate ball back to center
+		 
+		  // draw the ball
+		  draw_ball();
+		  glLoadIdentity();
+		  glTranslatef(20., 30., 0.);
+		  draw_square1();
+		
+
+		//Translate the bouncing ball to its new position
+	/*T[12] = xpos;
 	T[13] = ypos;
 	glLoadMatrixf(T);
 
@@ -166,10 +186,13 @@ void Display(void)
 	glMultMatrixf(S);
 	T1[13] = RadiusOfBall;
 	// Translate ball up so bottom is at the origin
-	glMultMatrixf(T1);
+	glMultMatrixf(T1);*/
 
-	draw_ball();
-	draw_ball2();
+	
+	//draw_square();
+	
+
+	//draw_ball2();
 	glutPostRedisplay();
 
 
