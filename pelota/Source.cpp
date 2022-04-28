@@ -6,6 +6,7 @@
 #include <math.h>
 #include <conio.h>
 
+
 #define PI 3.1415926535898 
 
 double xpos, ypos, ydir, xdir;         // x and y position for house to be drawn
@@ -69,148 +70,122 @@ void MyCircle1f(GLfloat centerx, GLfloat centery, GLfloat radius) {
 	glEnd();
 }
 
-GLfloat RadiusOfBall = 15.;
+GLfloat RadiusOfBall = 5.;
 GLfloat RadiusOfBall2 = 20.;
 
 // Draw the ball, centered at the origin
 void draw_ball() {
-	glColor3f(0.6, 0.3, 0.);
+	glColor3f(1, 1, 1.);
 	MyCircle2f(0., 0., RadiusOfBall);
 
 }
 
 void draw_square1() {
 	glColor3f(0., 0., 0.);
-	MySquare1f(0., 0., RadiusOfBall);
+	MySquare1f(0., 0., 0.);
 
 }
 
 /*void draw_ball2() {
 	glColor3f(0.4, 0.6, 0.);
 	MyCircle1f(50, 50, RadiusOfBall2);
+}*/void processKeys(int key, int x, int y) {
+	if (key == '0')
+		exit(0);
+	
+	if (key == GLUT_KEY_UP) {
+		ysqpos = ysqpos+5;
+		
+	}
+	
+	if (key == GLUT_KEY_DOWN) {
+		ysqpos = ysqpos-5;
 
-}*/
-
-void Display(void)
+	}
+	
+}
+void ball()
 {
-	// swap the buffers
-	glutSwapBuffers();
-
-	//clear all pixels with the specified clear color
-	glClear(GL_COLOR_BUFFER_BIT);
-	// 160 is max X value in our world
-	  // Define X position of the ball to be at center of window
-	//xpos = 80.;
-
-	// Shape has hit the ground! Stop moving and start squashing down and then back up 
-		/*if (ypos == RadiusOfBall && ydir == -1) {
-		sy = sy * squash;
-		if (sy < 0.8)
-			// reached maximum suqash, now unsquash back up
-			squash = 1.1;
-		else if (sy > 1.) {
-			// reset squash parameters and bounce ball back upwards
-			sy = 1.;
-			squash = 0.9;
-			ydir = 1;
-		}
-		sx = 1. / sy;
-	}*/
-	// 120 is max Y value in our world
-	// set Y position to increment 1.5 times the direction of the bounce
-	//else {
 	ypos = ypos + ydir * SPEED;
 	xpos = xpos + xdir * SPEED;
-	ysqpos = ysqpos;
-	xsqpos = xsqpos;
 	
+	if (ypos >= 120. - RadiusOfBall) {
+		ydir = -1;
 
-	// If ball touches the top, change direction of ball downwards
-	/*if (ypos == 120 - RadiusOfBall || xpos == 160 - RadiusOfBall) {
-		ydir = -1;
-		xdir = -xdir;
-	}
-	// If ball touches the bottom, change direction of ball upwards
-	else if (ypos < RadiusOfBall || xpos < RadiusOfBall) {
-		ydir = 1;
-		xdir = xdir;
-	}*/
-	if (ypos >= 120. - RadiusOfBall || ypos >= ysqpos - RadiusOfBall) {
-		ydir = -1;
-		
-		
+
 
 	}
 	// If ball touches the bottom, change direction of ball upwards
-	else if (ypos < RadiusOfBall || ypos < RadiusOfBall) {
+	else if (ypos < RadiusOfBall) {
 		ydir = 1;
 
 	}
 
 	//x horizontal
-	if (xpos >= 160. - RadiusOfBall || xpos >= xsqpos - RadiusOfBall) {
+	if (xpos >= 160. - RadiusOfBall) {
 		xdir = -1;
-		
-		
+
+
 	}
 
 	// If ball touches the bottom, change direction of ball upwards
-	else if (xpos < RadiusOfBall || xpos < RadiusOfBall) {
+	else if (xpos < RadiusOfBall) {
 		xdir = 1;
 	}
-
-	////////////////////////////////////////////////rebote con player/////////////////////////////////////////////////////////
-	
-
-	
-
-	//bola2
-	/*ypos = ypos + ydir * 1.5 - (1. - sy) * RadiusOfBall2;
-	// If ball touches the top, change direction of ball downwards
-	if (ypos == 120 - RadiusOfBall2)
-		ydir = -1, -1;
-	// If ball touches the bottom, change direction of ball upwards
-	else if (ypos < RadiusOfBall2)
-		ydir = 1, 1;*/
-
-
-		//reset transformation state
 	glLoadIdentity();
-	// apply translation
 	glTranslatef(xpos, ypos, 0.);
-	// Translate ball back to center
-
-	// draw the ball
 	draw_ball();
+}
+void PlayerIzq()
+{
+	
+	
+	// If ball touches the bottom, change direction of ball upwards
+	/**/
+
+	//x horizontal
+	if (xpos >= xsqpos - RadiusOfBall) {
+		xdir = -1;
+		if (ypos >= ysqpos - RadiusOfBall) {
+			ydir = -1;
+			
+		}
+		else if (ysqpos < RadiusOfBall) {
+			ydir = 1;
+
+		}
+
+	}
+	else if (xsqpos < RadiusOfBall) {
+		ydir = 1;
+
+	}
+	
+
+	// If ball touches the bottom, change direction of ball upwards
+	/*else if (xpos < RadiusOfBall) {
+		xdir = 1;
+	}*/
 	glLoadIdentity();
 	glTranslatef(xsqpos, ysqpos, 0.);
 	draw_square1();
+}
+void Update()
+{
+	ball();
+	PlayerIzq();
+}
 
-
-	//Translate the bouncing ball to its new position
-/*T[12] = xpos;
-T[13] = ypos;
-glLoadMatrixf(T);
-
-T1[13] = -RadiusOfBall;
-// Translate ball back to center
-glMultMatrixf(T1);
-S[0] = sx;
-S[5] = sy;
-// Scale the ball about its bottom
-glMultMatrixf(S);
-T1[13] = RadiusOfBall;
-// Translate ball up so bottom is at the origin
-glMultMatrixf(T1);*/
-
-
-//draw_square();
-
-
-//draw_ball2();
+void Display(void)
+{
+	Update();
+	processKeys;
+	glutSwapBuffers();
+	
+	//clear all pixels with the specified clear color
+	glClear(GL_COLOR_BUFFER_BIT);
+	
 	glutPostRedisplay();
-
-
 
 }
 
@@ -235,7 +210,7 @@ void init(void) {
 	glClearColor(0.0, 0.8, 0.0, 1.0);
 	// initial house position set to 0,0
 	xpos = 60; ypos = RadiusOfBall; xdir = 1; ydir = 1;
-	
+
 	sx = 1.; sy = 1.;
 	rot = 0;
 
@@ -251,5 +226,6 @@ void main(int argc, char* argv[])
 	init();
 	glutDisplayFunc(Display);
 	glutReshapeFunc(reshape);
+	glutSpecialFunc(processKeys);
 	glutMainLoop();
 }
