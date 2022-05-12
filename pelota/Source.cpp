@@ -1,34 +1,25 @@
 #include <windows.h> //the windows include file, required by all windows applications
+#include <math.h>    // included for the cos and sin functions
 #include <glut.h> //the glut file for windows operations
-// it also includes gl.h and glu.h for the openGL library calls
-#include <math.h>
-#include <conio.h>
+#include <cmath>     // it also includes gl.h and glu.h for the openGL library calls
+#include <conio.h> 
+#include <iostream>
+using namespace std;
 
+#define VK_W 0x57
+#define VK_S 0x53
 
 #define PI 3.1415926535898 
-
+int p1 = 0, p2 = 0;
+int deltaTime;
+int oldTime;
 double xpos, ypos, ydir, xdir;         // x and y position for house to be drawn
-double xsqpos = 50, xsq2pos;
-double ysqpos = 60, ysq2pos;
-
-double sx, sy, squash;          // xy scale factors
-double rot, rdir;             // rotation 
-float SPEED = 2.f;        // speed of timer call back in msecs
-bool pongHit;
+double xsqpos, ysqpos, ysqdir, xsq2pos, ysq2pos, ysq2dir;
+float SPEED = .3f;        // speed of timer call back in msecs
+bool pongHit, boolx, booly;
 double windowX = 640, windowY = 480;
-GLfloat T1[16] = { 1.,0.,0.,0.,\
-				  0.,1.,0.,0.,\
-				  0.,0.,1.,0.,\
-				  0.,0.,0.,1. };
-GLfloat S[16] = { 1.,0.,0.,0.,\
-				 0.,1.,0.,0.,\
-				 0.,0.,1.,0.,\
-				 0.,0.,0.,1. };
-GLfloat T[16] = { 1.,0.,0.,0.,\
-				 0., 1., 0., 0.,\
-				 0.,0.,1.,0.,\
-				 0.,0.,0.,1. };
 
+GLfloat RadiusOfBall = 5, ball_speed = 0.2;;
 
 
 #define PI 3.1415926535898 
@@ -60,152 +51,169 @@ void MySquare1f(GLfloat x1, GLfloat y1, GLfloat sidelength) {
 	glEnd();
 }
 
-void MyCircle1f(GLfloat centerx, GLfloat centery, GLfloat radius) {
-	GLint a;
-	GLdouble angle;
-	glBegin(GL_POLYGON);
-	for (a = 0; a < circle_points; a++) {
-		angle = 4 * PI * a / circle_points / 2;
-		glVertex2f(centerx + radius * cos(angle), centery + radius * sin(angle));
-	}
-	glEnd();
-}
+void DeltaTime() {
 
-GLfloat RadiusOfBall = 5.;
-GLfloat RadiusOfBall2 = 20.;
-
-// Draw the ball, centered at the origin
-void draw_ball() {
-	glColor3f(1, 1, 1.);
-	MyCircle2f(0., 0., RadiusOfBall);
+	int startTime = glutGet(GLUT_ELAPSED_TIME);
+	deltaTime = startTime - oldTime;
+	oldTime = startTime;
 
 }
 
-void draw_square1() {
-	glColor3f(0., 0., 0.);
-	MySquare1f(0., 0., 0.);
 
-}
-
-/*void draw_ball2() {
-	glColor3f(0.4, 0.6, 0.);
-	MyCircle1f(50, 50, RadiusOfBall2);
-}*/void processKeys(int key, int x, int y) {
-	if (key == '0')
-		exit(0);
-
-	if (key == GLUT_KEY_UP) {
-		ysqpos = ysqpos + 5;
-
-	}
-
-	if (key == GLUT_KEY_DOWN) {
-		ysqpos = ysqpos - 5;
-
-	}
-
-}
-void ball()
-{
-	//Hit Left Pong
+void Hit() {
 	if (xpos <= 30. && xpos >= 25. && ypos >= ysqpos && ypos <= (ysqpos + 60.) && xdir == -1.) {
 		pongHit = true;
 
 	}
-	//Hit Right Pong
+	
 	if (xpos >= (windowX / 2.) - 30. && xpos <= (windowX / 2.) - 25. && ypos >= ysq2pos && ypos <= (ysq2pos + 60.) && xdir == 1.) {
 		pongHit = true;
-		
-	}
-	ypos = ypos + ydir * SPEED;
-	xpos = xpos + xdir * SPEED;
-
-	if (ypos >= 120. - RadiusOfBall) {
-		ydir = -1;
-		pongHit = false;
-
-
 
 	}
-	// If ball touches the bottom, change direction of ball upwards
-	else if (ypos < RadiusOfBall) {
-		ydir = 1;
-		pongHit = false;
-	}
-
-	//x horizontal
-	if (xpos >= 160. - RadiusOfBall) {
-		xdir = -1;
-		pongHit = false;
-
-
-	}
-
-	// If ball touches the bottom, change direction of ball upwards
-	else if (xpos < RadiusOfBall) {
-		xdir = 1;
-		pongHit = false;
-	}
-	if (pongHit == true)
-	{
-		xdir = 1;
-	}
-	
-	glLoadIdentity();
-	glTranslatef(xpos, ypos, 0.);
-	draw_ball();
 }
+void ball()
+{
+
+	if (pongHit) {
+		boolx = !boolx;
+		pongHit = false;
+	}
+	else {
+		if (xpos < RadiusOfBall) {
+			p2++;
+			system("cls");
+			cout << "P1: " << p1 << "        " << "P2: " << p2 << endl;
+			xpos = windowX / 4.;      xdir = -1.;
+			ypos = windowX / 4.;      ydir = -1.;
+		}
+		else if (xpos > (windowX / 2.) - RadiusOfBall) {
+			p1++;
+			system("cls");
+			cout << "P1: " << p1 << "        " << "P2: " << p2 << endl;
+			xpos = windowX / 4.;      xdir = 1.;
+			ypos = windowX / 4.;      ydir = 1.;
+		}
+
+		if (ypos < RadiusOfBall) {
+			booly = true;
+		}
+		else if (ypos > (windowY / 2.) - RadiusOfBall) {
+			booly = false;
+		}
+	}
+}
+
+void draw_ball() {
+	glColor3f(0, 0, 0.);
+	MyCircle2f(0., 0., RadiusOfBall);
+
+}
+
+void processKeys() {
+	
+
+	if (GetAsyncKeyState(VK_UP)) {
+		if (ysqpos >= (windowY / 2) - 60.) {
+			ysqdir = 0.;
+		}
+		else {
+			ysqdir = 1.;
+		}
+
+	}
+
+	if (GetAsyncKeyState(VK_DOWN)) {
+		if (ysqpos <= 0.) {
+			ysqdir = 0.;
+		}
+		else {
+			ysqdir = -1.;
+		}
+	}
+	if (GetAsyncKeyState(VK_W)) {
+		if (ysq2pos >= (windowY / 2) - 60.) {
+			ysq2dir = 0.;
+		}
+		else {
+			ysq2dir = 1.;
+		}
+	}
+	if (GetAsyncKeyState(VK_S)) {
+		if (ysq2pos <= 0.) {
+			ysq2dir = 0.;
+		}
+		else {
+			ysq2dir = -1.;
+		}
+	}
+
+}
+
+// Draw the ball, centered at the origin
+
+void DrawPlayer() {
+	glColor3f(0., 0., 0.);
+	glRectf(0, 0, 10, 60);
+}
+
+
+/*void draw_square1() {
+	glColor3f(0., 0., 0.);
+	MySquare1f(0., 0., 0.);
+
+}*/
 void PlayerIzq()
 {
-	
-
-	// If ball touches the bottom, change direction of ball upwards
-	/**/
-
-	//x horizontal
-	/*if (xpos >= xsqpos - RadiusOfBall) {
-		xdir = -1;
-		if (ypos >= ysqpos - RadiusOfBall) {
-			ydir = -1;
-
-		}
-		else if (ysqpos < RadiusOfBall) {
-			ydir = 1;
-
-		}
-
-	}
-	else if (xsqpos < RadiusOfBall) {
-		ydir = 1;
-
-	}*/
-
-
-	// If ball touches the bottom, change direction of ball upwards
-	/*else if (xpos < RadiusOfBall) {
-		xdir = 1;
-	}*/
-	glLoadIdentity();
-	glTranslatef(xsqpos, ysqpos, 0.);
-	draw_square1();
+	ysqpos = ysqpos + (ysqdir * SPEED * deltaTime);
+	processKeys();
+	ysqdir = 0.;
+	glTranslatef(20., ysqpos, 0.);
+	DrawPlayer();
 }
-void Update()
-{
+void PlayerDer() {
+	ysq2pos = ysq2pos + (ysq2dir * SPEED * deltaTime);
+	processKeys();
+	ysq2dir = 0.;
+	glTranslatef((windowX / 2.) - 30., ysq2pos, 0.);
+	DrawPlayer();
+}
+
+void Circle() {
+	xpos = xpos + (xdir * ball_speed * deltaTime);
+	ypos = ypos + (ydir * ball_speed * deltaTime);
+	Hit();
 	ball();
-	PlayerIzq();
+	if (boolx) { xdir = 1; }
+	else { xdir = -1; }
+	if (booly) { ydir = 1; }
+	else { ydir = -1; }
+	glTranslatef(xpos, ypos, 0.); 
+	draw_ball();
 }
-
+void Update() {
+	PlayerIzq();
+	glPopMatrix();
+	glPushMatrix();
+	PlayerDer();
+	glPopMatrix();
+	glPushMatrix();
+	DeltaTime();
+	glLoadIdentity();
+	glPushMatrix();
+	Circle();
+	glPopMatrix();
+	glPushMatrix();
+	
+}
 void Display(void)
 {
-	Update();
-	processKeys;
-	glutSwapBuffers();
-
-	//clear all pixels with the specified clear color
+	
+	
 	glClear(GL_COLOR_BUFFER_BIT);
-
+	Update();                 
+	glPopMatrix();
+	glutSwapBuffers();
 	glutPostRedisplay();
-
 }
 
 
@@ -217,7 +225,7 @@ void reshape(int w, int h)
 	glLoadIdentity();
 
 	// keep our logical coordinate system constant
-	gluOrtho2D(0.0, 160.0, 0.0, 120.0);
+	gluOrtho2D(0.0, windowX / 2, 0.0, windowY / 2);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -226,13 +234,15 @@ void reshape(int w, int h)
 
 void init(void) {
 	//set the clear color to be white
-	glClearColor(0.0, 0.8, 0.0, 1.0);
-	// initial house position set to 0,0
-	xpos = 60; ypos = RadiusOfBall; xdir = 1; ydir = 1;
+	glClearColor(1, 1, 1, 1.0);
 
-	sx = 1.; sy = 1.;
-	rot = 0;
+	xpos = windowX / 4.;      xdir = 1.;
+	ypos = windowX / 4.;      ydir = 1.;
+	ysqpos = 0.; ysqdir = 0.;
+	ysq2pos = 0.; ysq2dir = 0.;
+	cout << "P1: " << p1 << "        " << "P2: " << p2 << endl;
 
+	
 }
 
 
@@ -240,11 +250,10 @@ void main(int argc, char* argv[])
 {
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(320, 240);
-	glutCreateWindow("Bouncing Ball");
+	glutInitWindowSize(windowX, windowY);
+	glutCreateWindow("Pong");
 	init();
 	glutDisplayFunc(Display);
 	glutReshapeFunc(reshape);
-	glutSpecialFunc(processKeys);
 	glutMainLoop();
 }
