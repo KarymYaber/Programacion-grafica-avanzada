@@ -1,8 +1,6 @@
-//Example2_4.cpp : A bouncing ball 
-
 #include <windows.h> //the windows include file, required by all windows applications
-#include <gl\glut.h> //the glut file for windows operations
-					 // it also includes gl.h and glu.h for the openGL library calls
+#include <glut.h> //the glut file for windows operations
+// it also includes gl.h and glu.h for the openGL library calls
 #include <math.h>
 #include <conio.h>
 
@@ -10,11 +8,14 @@
 #define PI 3.1415926535898 
 
 double xpos, ypos, ydir, xdir;         // x and y position for house to be drawn
-double xsqpos = 50;
-double ysqpos = 60;
+double xsqpos = 50, xsq2pos;
+double ysqpos = 60, ysq2pos;
+
 double sx, sy, squash;          // xy scale factors
 double rot, rdir;             // rotation 
-float SPEED = .05f;        // speed of timer call back in msecs
+float SPEED = 2.f;        // speed of timer call back in msecs
+bool pongHit;
+double windowX = 640, windowY = 480;
 GLfloat T1[16] = { 1.,0.,0.,0.,\
 				  0.,1.,0.,0.,\
 				  0.,0.,1.,0.,\
@@ -92,25 +93,36 @@ void draw_square1() {
 }*/void processKeys(int key, int x, int y) {
 	if (key == '0')
 		exit(0);
-	
+
 	if (key == GLUT_KEY_UP) {
-		ysqpos = ysqpos+5;
-		
-	}
-	
-	if (key == GLUT_KEY_DOWN) {
-		ysqpos = ysqpos-5;
+		ysqpos = ysqpos + 5;
 
 	}
-	
+
+	if (key == GLUT_KEY_DOWN) {
+		ysqpos = ysqpos - 5;
+
+	}
+
 }
 void ball()
 {
+	//Hit Left Pong
+	if (xpos <= 30. && xpos >= 25. && ypos >= ysqpos && ypos <= (ysqpos + 60.) && xdir == -1.) {
+		pongHit = true;
+
+	}
+	//Hit Right Pong
+	if (xpos >= (windowX / 2.) - 30. && xpos <= (windowX / 2.) - 25. && ypos >= ysq2pos && ypos <= (ysq2pos + 60.) && xdir == 1.) {
+		pongHit = true;
+		
+	}
 	ypos = ypos + ydir * SPEED;
 	xpos = xpos + xdir * SPEED;
-	
+
 	if (ypos >= 120. - RadiusOfBall) {
 		ydir = -1;
+		pongHit = false;
 
 
 
@@ -118,12 +130,13 @@ void ball()
 	// If ball touches the bottom, change direction of ball upwards
 	else if (ypos < RadiusOfBall) {
 		ydir = 1;
-
+		pongHit = false;
 	}
 
 	//x horizontal
 	if (xpos >= 160. - RadiusOfBall) {
 		xdir = -1;
+		pongHit = false;
 
 
 	}
@@ -131,7 +144,13 @@ void ball()
 	// If ball touches the bottom, change direction of ball upwards
 	else if (xpos < RadiusOfBall) {
 		xdir = 1;
+		pongHit = false;
 	}
+	if (pongHit == true)
+	{
+		xdir = 1;
+	}
+	
 	glLoadIdentity();
 	glTranslatef(xpos, ypos, 0.);
 	draw_ball();
@@ -139,16 +158,16 @@ void ball()
 void PlayerIzq()
 {
 	
-	
+
 	// If ball touches the bottom, change direction of ball upwards
 	/**/
 
 	//x horizontal
-	if (xpos >= xsqpos - RadiusOfBall) {
+	/*if (xpos >= xsqpos - RadiusOfBall) {
 		xdir = -1;
 		if (ypos >= ysqpos - RadiusOfBall) {
 			ydir = -1;
-			
+
 		}
 		else if (ysqpos < RadiusOfBall) {
 			ydir = 1;
@@ -159,8 +178,8 @@ void PlayerIzq()
 	else if (xsqpos < RadiusOfBall) {
 		ydir = 1;
 
-	}
-	
+	}*/
+
 
 	// If ball touches the bottom, change direction of ball upwards
 	/*else if (xpos < RadiusOfBall) {
@@ -181,10 +200,10 @@ void Display(void)
 	Update();
 	processKeys;
 	glutSwapBuffers();
-	
+
 	//clear all pixels with the specified clear color
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+
 	glutPostRedisplay();
 
 }
