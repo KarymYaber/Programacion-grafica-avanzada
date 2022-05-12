@@ -1,0 +1,3 @@
+﻿  Source.cpp
+c:\users\maq1\desktop\pyramid\pyramid\source.cpp(150): warning C4326: el tipo de valor devuelto de 'main' debe ser 'int' en lugar de 'void'
+  Pyramid.vcxproj -> C:\Users\Maq1\Desktop\Pyramid\Debug\Pyramid.exe
