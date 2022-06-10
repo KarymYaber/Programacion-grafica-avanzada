@@ -77,10 +77,10 @@ void processKeys()
 		eyZ = 0 /*centerZ*/ + 1 /*radius*/ * sin(-camAng);
 	}
 	if (GetAsyncKeyState(VK_LBUTTON)) {
-		lightPos = lightPos - .1
+		lightPos = lightPos - .1;
 	}
 	if (GetAsyncKeyState(VK_RBUTTON)) {
-		lightPos = lightPos + .1
+		lightPos = lightPos + .1;
 	}
 	if (GetAsyncKeyState(VK_DOWN)) {
 		centerZ = centerZ - 0.01;
@@ -133,7 +133,7 @@ void Display(void)
 
 	//gluPerspective(fang, aspect, 1., 20.0);
 	//glMatrixMode(GL_MODELVIEW);
-	
+
 	if (camAng >= 360) camAng = 0; else camAng += camRotSpeed;
 	//if (centerZ > 1.) centerZ = 1.;
 
@@ -155,8 +155,8 @@ void Display(void)
 	glFlush();
 
 	glutPostRedisplay();
-	
-	
+
+
 }
 
 void reshape(int w, int h)
