@@ -44,6 +44,7 @@ GLfloat xdir;
 GLfloat ydir;
 GLfloat ang, eyeX, eyeZ, eyeY, centerX, centerY, centerZ;
 GLfloat RED = 1., BLUE = 1., GREEN = 1.;
+GLfloat lightPos;
 
 //camera
 GLfloat eyez = 5., zmove = 1;
@@ -74,6 +75,12 @@ void processKeys()
 		//xdir = xdir - 0.2;
 		eyX = 0 /*centerX*/ + 1 /*radius*/ * cos(-camAng);
 		eyZ = 0 /*centerZ*/ + 1 /*radius*/ * sin(-camAng);
+	}
+	if (GetAsyncKeyState(VK_LBUTTON)) {
+		lightPos = lightPos - .1
+	}
+	if (GetAsyncKeyState(VK_RBUTTON)) {
+		lightPos = lightPos + .1
 	}
 	if (GetAsyncKeyState(VK_DOWN)) {
 		centerZ = centerZ - 0.01;
@@ -139,7 +146,7 @@ void Display(void)
 	draw_SnowMan(sXforms, allXforms, allXforms, allXforms, allXforms, allXforms, allXforms, allXforms, allXforms);
 	//glTranslatef(1., 1., 1.);
 
-	GLfloat light_position[] = { 0.0, 0.0, 1.0, 0.0 };
+	GLfloat light_position[] = { lightPos, 0.0, 1.0, 0.0 };
 	GLfloat light_ambient[] = { RED, GREEN, BLUE, 1.0 };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
